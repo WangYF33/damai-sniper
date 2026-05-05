@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>大麦抢票脚本 · 安装 & 配置</title>
+<style>
+:root{
+  --bg:#08080f;--s1:#111119;--s2:#18181f;--bd:rgba(255,255,255,.07);
+  --ac:#4f8eff;--ac2:#a855f7;--og:#f97316;--gn:#22c55e;
+  --tx:#e8e8f8;--mu:#7777aa;--r:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--tx);
+  font-family:-apple-system,'Helvetica Neue',sans-serif;
+  min-height:100dvh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;padding:20px 16px 72px}
+
+/* hero */
+.hero{text-align:center;padding:28px 0 20px}
+.hero-icon{font-size:48px;margin-bottom:10px}
+.hero h1{font-size:22px;font-weight:800;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#fff 30%,var(--ac));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:12px;color:var(--mu);margin-top:6px;line-height:1.7}
+
+/* url-display */
+.url-box{background:var(--s2);border:1px solid rgba(79,142,255,.25);
+  border-radius:10px;padding:10px 14px;margin:14px 0;
+  font-family:'Courier New',monospace;font-size:11px;color:var(--ac);
+  word-break:break-all;line-height:1.7}
+.url-label{font-size:10px;color:var(--mu);letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:4px;font-family:inherit}
+
+/* card */
+.card{background:var(--s1);border:1px solid var(--bd);
+  border-radius:var(--r);padding:18px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--mu);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px}
+.badge{display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));
+  border-radius:50%;font-size:11px;font-weight:800;color:#fff;flex-shrink:0}
+
+/* step */
+.step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.step:last-child{border-bottom:none;padding-bottom:0}
+.step:first-child{padding-top:0}
+.step-body .step-title{font-size:13px;font-weight:700;margin-bottom:3px}
+.step-body .step-desc{font-size:12px;color:var(--mu);line-height:1.7}
+.step-body .step-desc b{color:var(--tx)}
+.step-body .step-desc code{
+  background:var(--s2);border:1px solid var(--bd);
+  border-radius:5px;padding:1px 5px;font-family:'Courier New',monospace;
+  font-size:11px;color:var(--ac)}
+
+/* field */
+.field{display:flex;align-items:center;padding:9px 0;
+  border-bottom:1px solid var(--bd);gap:10px}
+.field:last-child{border-bottom:none;padding-bottom:0}
+.field:first-child{padding-top:0}
+.fl{font-size:12px;color:var(--mu);min-width:74px;flex-shrink:0}
+.field input{flex:1;background:transparent;border:none;outline:none;
+  color:var(--tx);font-size:13px;font-family:inherit;text-align:right}
+.field input::placeholder{color:var(--mu)}
+input[type=datetime-local]{color-scheme:dark}
+
+/* buttons */
+.btn{width:100%;padding:13px;border-radius:var(--r);border:none;
+  color:#fff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary{background:linear-gradient(135deg,var(--ac),var(--ac2));
+  box-shadow:0 4px 20px rgba(79,142,255,.25);margin-top:10px}
+.btn-primary:active{transform:scale(.98)}
+.btn-ghost{background:var(--s2);border:1px solid var(--bd);color:var(--ac);
+  box-shadow:none;margin-top:8px}
+
+/* bookmarklet drag zone */
+.bm-zone{background:linear-gradient(135deg,#0d1829,#130d29);
+  border:2px dashed rgba(79,142,255,.35);border-radius:var(--r);
+  padding:20px 16px;text-align:center;margin:12px 0}
+.bm-link{display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--ac),var(--ac2));
+  color:#fff;padding:12px 24px;border-radius:30px;
+  font-size:15px;font-weight:700;text-decoration:none;
+  box-shadow:0 4px 20px rgba(79,142,255,.35);cursor:grab}
+.bm-hint{font-size:11px;color:var(--mu);margin-top:10px;line-height:1.7}
+
+/* notice */
+.notice{border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.7;margin-bottom:12px}
+.notice-warn{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);color:#fdba74}
+.notice-warn b{color:var(--og)}
+.notice-info{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.25);color:#c084fc}
+.notice-info b{color:var(--ac2)}
+.notice-ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:#86efac}
+
+/* feedback */
+.feedback{display:none;align-items:center;justify-content:center;
+  gap:6px;font-size:13px;font-weight:600;margin-top:8px}
+.feedback.show{display:flex}
+.feedback.ok{color:var(--gn)}
+.feedback.cp{color:var(--ac)}
+
+/* loader preview */
+.loader-preview{background:var(--s2);border:1px solid var(--bd);border-radius:10px;
+  padding:10px 12px;font-family:'Courier New',monospace;font-size:11px;
+  color:#86efac;line-height:1.8;word-break:break-all;margin:10px 0;
+  position:relative}
+.copy-tiny{position:absolute;top:8px;right:8px;background:var(--s1);
+  border:1px solid var(--bd);border-radius:6px;padding:3px 8px;
+  font-size:10px;font-family:inherit;color:var(--ac);cursor:pointer}
+
+.footer{text-align:center;font-size:11px;color:var(--mu);margin-top:24px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon">🎫</div>
+    <h1>大麦抢票脚本</h1>
+    <p>Loader 方案 · 书签仅 ~160 字符 · Safari 完全兼容<br>
+    自动选票价 · 自动选观演人 · 支持 iPhone / 电脑</p>
+  </div>
+
+  <!-- WARN -->
+  <div class="notice notice-warn">
+    <b>使用前须知：</b>本脚本在你的浏览器本地运行，不向任何第三方服务器发送数据。
+    支付环节无法自动完成（支付安全强制人工确认）。请遵守大麦网用户协议。
+  </div>
+
+  <!-- ═══ STEP 1: 配置 ═══ -->
+  <div class="card">
+    <div class="card-title"><span class="badge">1</span> 填写抢票配置并保存</div>
+
+    <div class="field">
+      <span class="fl">开票时间</span>
+      <input type="datetime-local" id="cfgTime" oninput="updateURLs()">
+    </div>
+    <div class="field">
+      <span class="fl">票价档位名</span>
+      <input type="text" id="cfgPlanName" placeholder="如：内场A区（模糊匹配）" oninput="updateURLs()">
+    </div>
+    <div class="field">
+      <span class="fl">票价（元）</span>
+      <input type="number" id="cfgPlanPrice" placeholder="如：580（辅助匹配）" inputmode="decimal" oninput="updateURLs()">
+    </div>
+    <div class="field">
+      <span class="fl">观演人姓名</span>
+      <input type="text" id="cfgAudience" placeholder="多人用英文逗号，如：张三,李四" oninput="updateURLs()">
+    </div>
+    <div class="field">
+      <span class="fl">提前预热(秒)</span>
+      <input type="number" id="cfgPreload" value="30" min="5" max="300" oninput="updateURLs()">
+    </div>
+
+    <button class="btn btn-primary" onclick="saveConfig()">💾 保存配置</button>
+    <div class="feedback ok" id="fb-saved">✅ 配置已保存！</div>
+  </div>
+
+  <!-- ═══ STEP 2: 安装书签 ═══ -->
+  <div class="card">
+    <div class="card-title"><span class="badge">2</span> 安装书签加载器</div>
+
+    <!-- 脚本托管地址 -->
+    <div class="url-box">
+      <div class="url-label">📡 脚本托管地址（你的 GitHub Pages URL）</div>
+      <span id="scriptURLDisplay">https://你的用户名.github.io/damai-sniper/sniper.js</span>
+    </div>
+
+    <div class="notice notice-info" style="margin-bottom:14px">
+      <b>书签加载器原理：</b>书签只存一段极短代码（~160字符），点击后动态加载上方地址的脚本。
+      这样完全绕过 Safari 书签长度限制。
+    </div>
+
+    <!-- 加载器代码预览 -->
+    <div style="font-size:12px;color:var(--mu);margin-bottom:6px">书签加载器代码（点击复制）：</div>
+    <div class="loader-preview" id="loaderPreview">
+      正在生成…
+      <button class="copy-tiny" onclick="copyLoader()">复制</button>
+    </div>
+    <div id="loaderLen" style="font-size:11px;color:var(--mu);margin-top:4px;font-family:'Courier New',monospace"></div>
+
+    <!-- 电脑拖拽安装 -->
+    <div class="step" style="margin-top:14px">
+      <span class="badge" style="background:#1e293b;color:var(--mu);font-size:16px">💻</span>
+      <div class="step-body">
+        <div class="step-title">电脑（Chrome / Edge）— 拖拽安装</div>
+        <div class="step-desc">
+          按 <b>Ctrl+Shift+B</b> 显示书签栏，然后把下方按钮<b>拖到书签栏</b>即可。
+        </div>
+      </div>
+    </div>
+
+    <div class="bm-zone">
+      <a class="bm-link" id="bmLink" href="#" onclick="return false">🎫 大麦抢票</a>
+      <div class="bm-hint">☝ 拖动此按钮到浏览器书签栏 · 不要直接点击</div>
+    </div>
+
+    <!-- iOS 安装 -->
+    <div class="step">
+      <span class="badge" style="background:#1e293b;color:var(--mu);font-size:16px">📱</span>
+      <div class="step-body">
+        <div class="step-title">iPhone Safari — 4 步安装</div>
+        <div class="step-desc">
+          <b>① 先填好上方所有配置，点「保存配置」</b>（书签代码会自动更新）<br>
+          <b>② 点击「复制书签加载器代码」</b>按钮<br>
+          <b>③ Safari 随便收藏一个网页</b>，名称填「大麦抢票」，完成保存<br>
+          <b>④ 编辑该书签</b>：书签列表长按「大麦抢票」→ 编辑 →
+          地址栏<b>全选删除后粘贴</b>复制的代码 → 存储<br>
+          <b style="color:#f97316">⚠ 每次修改配置后需重新复制代码并重新编辑书签地址</b>
+        </div>
+      </div>
+    </div>
+    <div class="feedback cp" id="fb-copied">✅ 已复制！按上方第②③步完成安装</div>
+
+    <button class="btn btn-ghost" onclick="copyLoader()">📋 复制书签加载器代码（iOS 用）</button>
+  </div>
+
+  <!-- ═══ STEP 3: GitHub 部署 ═══ -->
+  <div class="card">
+    <div class="card-title"><span class="badge">3</span> 将脚本部署到 GitHub Pages</div>
+
+    <div class="step">
+      <span class="badge">①</span>
+      <div class="step-body">
+        <div class="step-title">新建仓库</div>
+        <div class="step-desc">
+          登录 GitHub → 右上角 <b>「+」→ New repository</b><br>
+          仓库名填：<code>damai-sniper</code><br>
+          勾选 <b>「Add a README file」</b> → 点 Create repository
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">②</span>
+      <div class="step-body">
+        <div class="step-title">上传两个文件</div>
+        <div class="step-desc">
+          在仓库页点 <b>「Add file → Upload files」</b><br>
+          上传压缩包里的 <code>sniper.js</code> 和 <code>index.html</code><br>
+          点 <b>「Commit changes」</b> 确认
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">③</span>
+      <div class="step-body">
+        <div class="step-title">开启 GitHub Pages</div>
+        <div class="step-desc">
+          仓库页点 <b>Settings → Pages</b><br>
+          Source 选 <b>「Deploy from a branch」</b><br>
+          Branch 选 <b>「main」「/ (root)」</b> → Save<br>
+          约 1 分钟后，脚本地址变为：<br>
+          <code>https://你的用户名.github.io/damai-sniper/sniper.js</code>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">④</span>
+      <div class="step-body">
+        <div class="step-title">填入你的用户名，更新书签</div>
+        <div class="step-desc">
+          回到本页，在下方输入你的 GitHub 用户名，页面会<b>自动更新书签代码</b>，重新复制安装一次即可。
+        </div>
+      </div>
+    </div>
+
+    <!-- 用户名输入 -->
+    <div class="field" style="margin-top:6px">
+      <span class="fl">GitHub 用户名</span>
+      <input type="text" id="ghUser" placeholder="如：zhangsan" oninput="updateURLs()" autocorrect="off" autocapitalize="none">
+    </div>
+    <div class="notice notice-ok" id="urlConfirm" style="display:none;margin-top:10px">
+      🎉 脚本地址已更新！重新复制书签代码并按步骤 2 安装即可。
+    </div>
+  </div>
+
+  <!-- ═══ STEP 4: 使用 ═══ -->
+  <div class="card">
+    <div class="card-title"><span class="badge">4</span> 使用流程</div>
+    <div class="step">
+      <span class="badge">①</span>
+      <div class="step-body">
+        <div class="step-title">【可选·方案C预备】提前抓取大麦 Cookie</div>
+        <div class="step-desc">
+          若你的演出会显示「该渠道不支持购票」，需提前准备好 Cookie。<br>
+          App Store 安装 <b>Stream</b>（免费）→ 开启抓包 →
+          打开大麦App进入该演出购票页 → Stream 找到
+          <code>damai.cn</code> 请求 → Request → Headers →
+          复制 <b>Cookie</b> 字段的完整值，备用。
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">②</span>
+      <div class="step-body">
+        <div class="step-title">Safari 打开大麦演出页并登录</div>
+        <div class="step-desc">进入该演出页面（即使显示渠道拦截也没关系），确认已登录账号</div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">③</span>
+      <div class="step-body">
+        <div class="step-title">点击书签「大麦抢票」</div>
+        <div class="step-desc">
+          脚本加载后自动检测渠道状态：<br>
+          • <b style="color:#22c55e">页面正常</b> → 直接进入倒计时 ✓<br>
+          • <b style="color:#f97316">检测到拦截</b> → 自动尝试方案A（UA伪造+刷新）<br>
+          • <b style="color:#ef4444">方案A失败</b> → 面板显示方案C引导，粘贴 Cookie 注入
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">④</span>
+      <div class="step-body">
+        <div class="step-title">倒计时进行中，保持页面前台</div>
+        <div class="step-desc">
+          面板显示配置信息和倒计时。<b>不要切到后台或锁屏</b>，否则 Safari 会暂停 JS 执行。
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <span class="badge">⑤</span>
+      <div class="step-body">
+        <div class="step-title">时间到 → 自动执行购票序列</div>
+        <div class="step-desc">
+          自动：<b>选票价档位 → 点立即购买 → 选观演人 → 确认</b><br>
+          失败自动重试，最多 100 次。跳转到支付页后<b>手动完成支付宝付款</b>。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    大麦抢票脚本 v1.0 · GitHub Pages Loader 方案<br>
+    所有数据本地存储 · 不连接任何第三方服务器
+  </div>
+
+</div>
+
+<script>
+/* ── 初始化 ─────────────────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', function(){
+  // 回填已保存的配置
+  try{
+    var c=JSON.parse(localStorage.getItem('ts_snipe_config')||'{}');
+    if(c.saleTime){
+      var d=new Date(c.saleTime);
+      document.getElementById('cfgTime').value=
+        new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    }
+    if(c.planName)  document.getElementById('cfgPlanName').value=c.planName;
+    if(c.planPrice) document.getElementById('cfgPlanPrice').value=c.planPrice;
+    if(c.audienceNames) document.getElementById('cfgAudience').value=c.audienceNames.join(',');
+    if(c.preloadSeconds) document.getElementById('cfgPreload').value=c.preloadSeconds;
+    if(c._ghUser){
+      document.getElementById('ghUser').value=c._ghUser;
+      updateURLs();
+    }
+  }catch(e){}
+
+  // 默认开票时间
+  if(!document.getElementById('cfgTime').value){
+    var d=new Date(Date.now()+3600000);
+    document.getElementById('cfgTime').value=
+      new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  }
+
+  updateURLs(); // 初始渲染
+});
+
+/* ── 读取表单当前值 ──────────────────────────────────────────── */
+function getFormValues(){
+  var timeVal = document.getElementById('cfgTime').value;
+  return {
+    user:    (document.getElementById('ghUser').value||'').trim(),
+    sale:    timeVal ? new Date(timeVal).toISOString() : '',
+    plan:    document.getElementById('cfgPlanName').value.trim(),
+    price:   document.getElementById('cfgPlanPrice').value.trim(),
+    names:   document.getElementById('cfgAudience').value.trim(),
+    pre:     document.getElementById('cfgPreload').value.trim() || '30',
+  };
+}
+
+/* ── 脚本基础 URL ────────────────────────────────────────────── */
+function getScriptURL(){
+  var user = getFormValues().user;
+  if(!user) return 'https://你的用户名.github.io/damai-sniper/sniper.js';
+  return 'https://'+user+'.github.io/damai-sniper/sniper.js';
+}
+
+/* ── 生成带参数的书签 Loader 代码（核心修改）────────────────── */
+// 配置参数直接拼入 script src，彻底绕过跨域 localStorage 问题
+// 最终格式：sniper.js?t=时间戳&sale=ISO&plan=档位名&price=票价&names=张三,李四&pre=30
+function getLoaderCode(){
+  var v   = getFormValues();
+  var base = getScriptURL();
+
+  // 只拼入非空参数，减少 URL 长度
+  var params = [];
+  if(v.sale)  params.push('sale='  + encodeURIComponent(v.sale));
+  if(v.plan)  params.push('plan='  + encodeURIComponent(v.plan));
+  if(v.price) params.push('price=' + encodeURIComponent(v.price));
+  if(v.names) params.push('names=' + encodeURIComponent(v.names));
+  if(v.pre && v.pre!=='30') params.push('pre=' + v.pre);
+
+  // t= 防缓存参数在运行时动态加，这里用占位符
+  var paramStr = params.length ? '&' + params.join('&') : '';
+
+  // 书签代码：动态拼接 t= 时间戳 + 配置参数
+  return "javascript:void((function(){"
+    + "var s=document.createElement('script');"
+    + "s.src='" + base + "?t='+Date.now()+'" + paramStr + "';"
+    + "document.head.appendChild(s);"
+    + "})())";
+}
+
+/* ── URL 与 Loader 动态更新（每次表单变化时调用）────────────── */
+function updateURLs(){
+  var v      = getFormValues();
+  var url    = getScriptURL();
+  var loader = getLoaderCode();
+
+  // 更新脚本地址显示
+  var d = document.getElementById('scriptURLDisplay');
+  if(d) d.textContent = url;
+
+  // 更新拖拽书签 href
+  var lk = document.getElementById('bmLink');
+  if(lk) lk.href = loader;
+
+  // 更新 loader 预览文字（保留复制按钮）
+  var lp  = document.getElementById('loaderPreview');
+  if(lp){
+    var btn = lp.querySelector('.copy-tiny');
+    lp.textContent = loader;
+    if(btn) lp.appendChild(btn);
+  }
+
+  // 显示长度提示
+  var lenEl = document.getElementById('loaderLen');
+  if(lenEl) lenEl.textContent = '书签长度：' + loader.length + ' 字符（Safari 限制约 2000）';
+
+  // 显示确认 notice
+  var nc = document.getElementById('urlConfirm');
+  if(nc) nc.style.display = v.user ? 'block' : 'none';
+
+  // 保存用户名
+  if(v.user){
+    try{
+      var c = JSON.parse(localStorage.getItem('ts_snipe_config')||'{}');
+      c._ghUser = v.user;
+      localStorage.setItem('ts_snipe_config', JSON.stringify(c));
+    }catch(e){}
+  }
+}
+
+/* ── 保存配置 ────────────────────────────────────────────────── */
+// 保存到 localStorage（供本页回填用）并立刻刷新书签代码
+function saveConfig(){
+  var v = getFormValues();
+  var cfg = {
+    saleTime:       v.sale  || null,
+    planName:       v.plan,
+    planPrice:      parseFloat(v.price) || 0,
+    audienceNames:  v.names ? v.names.split(',').map(function(s){return s.trim();}).filter(Boolean) : [],
+    preloadSeconds: parseInt(v.pre) || 30,
+    _ghUser:        v.user,
+  };
+  localStorage.setItem('ts_snipe_config', JSON.stringify(cfg));
+
+  // 重新生成书签代码（含最新配置参数）
+  updateURLs();
+  feedback('fb-saved');
+}
+
+/* ── 复制 Loader ─────────────────────────────────────────────── */
+function copyLoader(){
+  var code=getLoaderCode();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(code).then(function(){feedback('fb-copied');});
+  } else {
+    var ta=document.createElement('textarea');
+    ta.value=code; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    feedback('fb-copied');
+  }
+}
+
+/* ── 反馈 ────────────────────────────────────────────────────── */
+function feedback(id){
+  var el=document.getElementById(id); if(!el)return;
+  el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},3000);
+}
+</script>
+</body>
+</html>
